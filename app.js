@@ -4,7 +4,7 @@
 
   // ====== CONFIG ======
   // URL do Apps Script Web App (preencha após deploy do Code.gs — instruções em SETUP.md)
-  var WEB_APP_URL = 'https://script.google.com/macros/s/REPLACE_ME/exec';
+  var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzjq4BBMKmjKc-1UQ3HwSGzzpF2XY6B3RTHt6pAweyw2-2JJdqc32tS9Yt5M1P3gaYx/exec';
   // Para onde o lead é redirecionado após enviar o form
   var REDIRECT_URL = 'https://gruposvip.com/redirect/627/curso-presencial-vetspro-27-e-28-de-junho';
 
