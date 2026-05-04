@@ -291,34 +291,34 @@
       <h2>Entre na <em>1ª edição presencial</em> do Anestesia Descomplicada.</h2>
       <p>Preencha o formulário ao lado e nosso time entra em contato para confirmar disponibilidade de vaga e condições de pagamento.</p>
     </div>
-    <form class="enroll-form" id="enroll-form">
+    <form class="enroll-form" id="enroll-form" novalidate>
       <h3>Garantir minha vaga</h3>
-      <p class="helper">Vagas limitadas pela capacidade da sala. Resposta em até 24h úteis.</p>
+      <p class="helper">Vagas limitadas pela capacidade da sala. Após enviar, você é direcionado para a página de inscrição oficial.</p>
       <div class="form-fields">
-        <div class="field"><label>Nome completo</label><input type="text" required name="name" placeholder="Seu nome"></div>
-        <div class="field"><label>E-mail profissional</label><input type="email" required name="email" placeholder="voce@clinica.com"></div>
-        <div class="field"><label>WhatsApp</label><input type="tel" required name="phone" placeholder="(11) 9 0000-0000"></div>
-        <div class="field"><label>Você é</label>
-          <select required name="role">
-            <option value="">Selecione</option>
-            <option>Médico-veterinário clínico</option>
-            <option>Médico-veterinário cirurgião</option>
-            <option>Estudante (a partir do 7º período)</option>
-            <option>Outro</option>
-          </select>
+        <div class="field">
+          <label for="f-nome">Nome completo</label>
+          <input id="f-nome" type="text" required name="nome" placeholder="Seu nome" autocomplete="name">
         </div>
-        <button type="submit" class="btn-primary">
-          Quero garantir minha vaga
+        <div class="field field-phone">
+          <div class="field-phone-grid">
+            <div>
+              <label for="f-ddd">DDD</label>
+              <input id="f-ddd" type="tel" required name="ddd" placeholder="11" maxlength="3" inputmode="numeric" pattern="[0-9]{2,3}">
+            </div>
+            <div>
+              <label for="f-whatsapp">WhatsApp</label>
+              <input id="f-whatsapp" type="tel" required name="whatsapp" placeholder="9 0000-0000" inputmode="numeric" autocomplete="tel-national">
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" id="form-submit">
+          <span class="btn-label">Quero garantir minha vaga</span>
           <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true"><path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.4"/></svg>
         </button>
         <div class="secure">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 1l4 2v3c0 2.5-1.7 4.5-4 5-2.3-.5-4-2.5-4-5V3l4-2z" stroke="currentColor" stroke-width="1.2"/></svg>
-          Seus dados estão seguros · Não enviamos spam
+          Seus dados estão seguros · Sem spam
         </div>
-      </div>
-      <div class="form-thanks" style="display:none;padding:40px 0;text-align:center;">
-        <div style="font-family:Fraunces,serif;font-size:26px;color:var(--ink);margin-bottom:12px;">Recebido. ✓</div>
-        <p style="font-size:14px;color:var(--muted);line-height:1.6;">Em breve nosso time entra em contato no WhatsApp informado para confirmar sua vaga.</p>
       </div>
     </form>
   </div>

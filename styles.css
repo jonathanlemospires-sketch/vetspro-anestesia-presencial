@@ -574,10 +574,31 @@ section { padding: 120px 48px; }
 .field input:focus, .field select:focus { border-color: var(--gold); }
 .field input::placeholder { color: rgba(10,31,51,.35); }
 .enroll-form .btn-primary { width: 100%; justify-content: center; margin-top: 12px; }
+.enroll-form .btn-primary[disabled] { opacity: 0.6; cursor: wait; }
 .enroll-form .secure {
   display: flex; align-items: center; gap: 10px; margin-top: 20px;
   font-size: 11.5px; color: var(--muted); justify-content: center;
 }
+.field-phone-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  align-items: end;
+}
+.field-phone-grid > div { display: flex; flex-direction: column; }
+.field-phone-grid label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; color: var(--ink-2);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+}
+.field-phone-grid input {
+  background: transparent; border: 0; border-bottom: 1px solid rgba(10,31,51,.18);
+  padding: 10px 0; font-size: 15px; color: var(--ink);
+  font-family: inherit; outline: none; transition: border-color .15s;
+}
+.field-phone-grid input:focus { border-color: var(--gold); }
+.field-phone-grid input::placeholder { color: rgba(10,31,51,.35); }
+.field-phone { margin-bottom: 18px; }
 
 /* ─────────── FOOTER ─────────── */
 footer {

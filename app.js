@@ -2,6 +2,12 @@
 (function () {
   'use strict';
 
+  // ====== CONFIG ======
+  // URL do Apps Script Web App (preencha após deploy do Code.gs — instruções em SETUP.md)
+  var WEB_APP_URL = 'https://script.google.com/macros/s/REPLACE_ME/exec';
+  // Para onde o lead é redirecionado após enviar o form
+  var REDIRECT_URL = 'https://gruposvip.com/redirect/627/curso-presencial-vetspro-27-e-28-de-junho';
+
   // CTA scroll
   function scrollToForm() {
     var el = document.getElementById('inscricao');
@@ -17,6 +23,7 @@
   // Nav scroll state
   var nav = document.querySelector('.nav');
   function onScroll() {
+    if (!nav) return;
     if (window.pageYOffset > 40) nav.classList.add('scrolled');
     else nav.classList.remove('scrolled');
   }
@@ -41,15 +48,84 @@
     });
   });
 
-  // Form submit
+  // ====== FORM SUBMIT — captura no Sheet + redireciona ======
   var form = document.getElementById('enroll-form');
   if (form) {
+    var btn = document.getElementById('form-submit');
+    var btnLabel = btn && btn.querySelector('.btn-label');
+
+    function setLoading(loading) {
+      if (!btn) return;
+      btn.disabled = loading;
+      if (btnLabel) btnLabel.textContent = loading ? 'Enviando…' : 'Quero garantir minha vaga';
+      btn.style.opacity = loading ? '0.7' : '';
+      btn.style.cursor = loading ? 'wait' : '';
+    }
+
+    function onlyDigits(v) { return (v || '').toString().replace(/\D/g, ''); }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var fields = form.querySelector('.form-fields');
-      var thanks = form.querySelector('.form-thanks');
-      if (fields) fields.style.display = 'none';
-      if (thanks) thanks.style.display = 'block';
+
+      var nome = (form.elements['nome'].value || '').trim();
+      var ddd = onlyDigits(form.elements['ddd'].value);
+      var whatsapp = onlyDigits(form.elements['whatsapp'].value);
+
+      if (!nome || nome.length < 2) {
+        form.elements['nome'].focus();
+        form.elements['nome'].setCustomValidity('Por favor, informe seu nome.');
+        form.elements['nome'].reportValidity();
+        return;
+      }
+      if (!ddd || ddd.length < 2) {
+        form.elements['ddd'].focus();
+        form.elements['ddd'].setCustomValidity('DDD inválido.');
+        form.elements['ddd'].reportValidity();
+        return;
+      }
+      if (!whatsapp || whatsapp.length < 8) {
+        form.elements['whatsapp'].focus();
+        form.elements['whatsapp'].setCustomValidity('Número inválido.');
+        form.elements['whatsapp'].reportValidity();
+        return;
+      }
+      // limpar mensagens
+      ['nome','ddd','whatsapp'].forEach(function(n){ form.elements[n].setCustomValidity(''); });
+
+      setLoading(true);
+
+      var params = new URLSearchParams();
+      params.append('nome', nome);
+      params.append('ddd', ddd);
+      params.append('whatsapp', whatsapp);
+      params.append('source', 'landing-vetspro-presencial');
+
+      function redirect() { window.location.href = REDIRECT_URL; }
+
+      // Fire-and-forget POST (Apps Script Web App ignora preflight com mode:no-cors)
+      // Mesmo que o POST falhe silenciosamente, o lead é redirecionado.
+      try {
+        var promise = fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: params.toString()
+        });
+        // Garante redirect em até 1.5s mesmo se o request demorar
+        var redirected = false;
+        var fallback = setTimeout(function () { if (!redirected) { redirected = true; redirect(); } }, 1500);
+        promise.finally(function () {
+          if (!redirected) { redirected = true; clearTimeout(fallback); redirect(); }
+        });
+      } catch (err) {
+        redirect();
+      }
+    });
+
+    // Limpar mensagens de erro ao digitar
+    ['nome','ddd','whatsapp'].forEach(function (n) {
+      var el = form.elements[n];
+      if (el) el.addEventListener('input', function () { el.setCustomValidity(''); });
     });
   }
 
