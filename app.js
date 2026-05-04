@@ -94,6 +94,9 @@
 
       setLoading(true);
 
+      // Facebook Pixel — InitiateCheckout antes do redirect
+      try { if (typeof fbq === 'function') fbq('track', 'InitiateCheckout'); } catch (_) {}
+
       var params = new URLSearchParams();
       params.append('nome', nome);
       params.append('ddd', ddd);
